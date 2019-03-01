@@ -1,3 +1,5 @@
+![screenshot](scrot_1.png?raw=true "The game in its current state")
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
