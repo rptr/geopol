@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-var TICK_RATE = 100;
+var TICK_RATE = 1000;
 var OPINION_MAX = 100;
 var OPINION_MIN = 0;
 var OPINION_START = 50;
@@ -119,12 +119,16 @@ class Flag extends React.Component {
     let y = this.props.y;
     let style = {/*background: color,*/
                 left: x,
-                bottom: y};
+                top: y,
+                position: "absolute"};
     
     return (
-      <button className="flag-bg" style={style} onClick={() => {this.props.select_nation(i);}}>
-        <img src={url} />
-      </button>
+        <div style={style}>
+            <button className="flag-bg" onClick={() => {this.props.select_nation(i);}}>
+            <img src={url} />
+            </button>
+            <img className="emotion" src="emotes/icon_lol.png" />
+        </div>
     );
   }
 }
@@ -153,8 +157,10 @@ class Board extends React.Component {
     let num = codes.length;
 
     // scale positions to cover whole screen
-    let x_mult = screen_w() / num;
-    let y_mult = screen_h() / OPINION_MAX;
+    let flag_w = 50;
+    let flag_h = 50;
+    let x_num = Math.floor(screen_w() / flag_w);
+//    let = screen_h() / OPINION_MAX;
     
     for (var i = 0; i < num; i ++)
     {
@@ -165,8 +171,8 @@ class Board extends React.Component {
 
       let player = this.props.player;
       let opinion = this.props.opinions[i][player];
-      let x = i * x_mult;
-      let y = opinion * y_mult;
+      let x = Math.floor(i % x_num) * flag_w; 
+      let y = Math.floor(i / x_num) * 40;
       
       rows.push(<Flag select_nation={this.props.select_nation} 
                       player_nation={player}
@@ -174,7 +180,7 @@ class Board extends React.Component {
     }
     
     return (
-      <div>
+      <div style={{position: "relative", top: "20px"}}>
         {rows}
       </div>
     );
@@ -521,7 +527,7 @@ class GameScreen extends React.Component {
             
             <p className="title">{names[us]}</p>
             <p className="enemy-title">{names[selected]}</p>
-            <p id="enemy-opinion">OPINION = {this.get_opinion(selected, us)}</p>
+            <p id="enemy-opinion">OPINION = {Math.floor(this.get_opinion(selected, us))}</p>
             <p id="enemy-mood">(Trump) {mood_text}</p>
           </div>
           <div className="game-board">
@@ -556,8 +562,6 @@ class FlagPicker extends React.Component
     let flags = [];
     let mx = window.innerWidth / 2;
     let my = window.innerHeight / 2;
-
-    console.log(num_nations);
 
     let time = (new Date()).getTime() / 10000;
 
@@ -622,7 +626,7 @@ class Main extends React.Component
     
     this.state =
     {
-        scene: Scene.Game
+        scene: Scene.Intro
     };
 
     setTimeout(() => {

@@ -153,3 +153,12 @@ p.enemy-title {
     text-align: center;
 }
 
+.emotion
+{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: -10px;
+    top: 10px;
+}
+
